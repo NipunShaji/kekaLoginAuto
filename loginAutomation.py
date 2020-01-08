@@ -20,14 +20,25 @@ print('Auto login initiated')
 def Wait_by_id(id):
     print('Waiting for id ["{}"]'.format(id))
     for i in range(320):
-        time.sleep(.5)
         try:
             browser.find_element_by_id(id)
             return True
         except NoSuchElementException:
-            pass
+            time.sleep(0.5)
     else:
         print('Id ["{}"] not found'.format(id))
+        return False
+
+def waitForClockIn():
+    print('waiting for web clock-in button');
+    for i in range(320):
+        try:
+            browser.find_element_by_css_selector('input[value="Web Clock-In"]')
+            return True
+        except NoSuchElementException:
+            time.sleep(0.5)
+    else:
+        print("Element not found")
         return False
 
 # Read credentials from file
@@ -58,6 +69,7 @@ firefoxProfile.set_preference("geo.enabled", True)
 firefoxProfile.set_preference("geo.provider.use_corelocation",True)
 firefoxProfile.set_preference("geo.prompt.testing",True)
 firefoxProfile.set_preference("geo.prompt.testing.allow",True)
+firefoxProfile.set_preference("browser.link.open_newwindow.restriction", 0)
 
 print('Opening a new browser window')
 try:
@@ -133,4 +145,7 @@ while browser.current_url != keka_url:
 # get a reference to webclockin button and click
 # Check if web clock in Successful
 
-browser.find_element_by_xpath("//button[text()='Web Clock-In']").click()
+if(waitForClockIn()):
+    browser.find_element_by_css_selector("input[value='Web Clock-In']").click()
+else:
+    browser.quit()
