@@ -43,8 +43,12 @@ def waitForClockIn():
 
 # Read credentials from file
 print('Reading credentials..')
+import os
 try:
-    file = open("credentials.txt",'r')
+    input("trying to read file.")
+    print(os.getcwd())
+    input("  ")
+    file = open("browserAutomation/credentials.txt",'r')
 except:
     print('Some problem with file reading\nTerminating...')
     sys.exit()
@@ -69,7 +73,9 @@ firefoxProfile.set_preference("geo.enabled", True)
 firefoxProfile.set_preference("geo.provider.use_corelocation",True)
 firefoxProfile.set_preference("geo.prompt.testing",True)
 firefoxProfile.set_preference("geo.prompt.testing.allow",True)
+firefoxProfile.set_preference("browser.link.open_newwindow",3)
 firefoxProfile.set_preference("browser.link.open_newwindow.restriction", 0)
+input("its working...3")
 
 print('Opening a new browser window')
 try:
@@ -82,6 +88,7 @@ except:
 # Open web login url
 print('Opening local login url')
 browser.get(net_url)
+# browser.switch_to_window(browser.window_handles[0])
 while True:
     if not Wait_by_id('loginbutton'):
         browser.quit()
@@ -146,6 +153,6 @@ while browser.current_url != keka_url:
 # Check if web clock in Successful
 
 if(waitForClockIn()):
-    browser.find_element_by_css_selector("input[value='Web Clock-In']").click()
+    driver.find_elements_by_xpath("//*[contains(text(), 'Web Clock-In')]").click()
 else:
-    browser.quit()
+    browsedr.quit()
